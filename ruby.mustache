@@ -1,0 +1,67 @@
+require 'net/http'
+{{#body.has_json_body}}
+require 'json'
+{{/body.has_json_body}}
+
+def send_request
+    # {{{request.name}}} ({{{request.method}}} {{{url.base}}})
+    
+    begin
+        uri = URI('{{{url.base}}}')
+            
+        http = Net::HTTP.new(uri.host, uri.port)
+        req =  Net::HTTP::{{{method}}}.new(uri)
+        
+        {{#url.has_params}}
+        data = {
+        {{#url.params}}
+        "{{{name}}}" => "{{{value}}}",
+        {{/url.params}}
+        }
+        req.form_data = data
+        {{/url.has_params}}
+            
+        {{#headers.has_headers}}
+        {{#headers.header_list}}
+        req.add_field "{{{header_name}}}, {{{header_value}}}"
+        {{/headers.header_list}}
+        {{/headers.has_headers}}
+        
+        {{#body.has_raw_body}}
+        req.body = "{{{body.raw_body}}}"
+        {{/body.has_raw_body}}
+        
+        {{#body.has_long_body}}
+        data = "" # set your body string
+        req.body = "{{{data}}}"
+        {{/body.has_long_body}}
+        
+        {{#body.has_url_encoded_body}}
+        data = {
+        {{#body.url_encoded_body}}
+        "{{{name}}}" => "{{{value}}}",
+        {{/body.url_encoded_body}}
+        }
+        req.body = "{{{data}}}"
+        {{/body.has_url_encoded_body}}
+        
+        {{#body.has_multipart_body}}
+        files = {
+        {{#body.multipart_body}}
+        "{{{name}}}" => "{{{value}}}",
+        {{/body.multipart_body}}
+        }
+        req.form_data = files
+        {{/body.has_multipart_body}}
+        
+        {{#body.has_json_body}}
+        data = JSON.dump({{{body.json_body_object}}})
+        req.body = "{{{data}}}"
+        {{/body.has_json_body}}
+        
+        res = http.request(req)
+        puts "Response HTTP #{res.code}"
+    rescue Exception => e
+        puts "HTTP Request failed (#{e.message})"
+    end
+end
