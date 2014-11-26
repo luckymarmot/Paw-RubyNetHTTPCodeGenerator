@@ -6,7 +6,7 @@ This a Paw Extension that generates code for Ruby using the [Net::HTTP](http://r
 
 This Paw Extension is released under the [MIT License](LICENSE). Feel free to fork, and modify!
 
-Created by Quentin Rousseau (@kwent). See [Authors](AUTHORS.md).
+Created by Quentin Rousseau ([@kwent](https://github.com/kwent)). See [Authors](AUTHORS.md).
 
 Copyright © 2014 Paw Inc.
 

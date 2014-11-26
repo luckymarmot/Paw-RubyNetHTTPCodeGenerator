@@ -1,4 +1,3 @@
-Created by Quentin Rousseau (@kwent). Contributors:
+Created by Quentin Rousseau ([@kwent](https://github.com/kwent)). Contributors:
 
-* Quentin Rousseau (@kwent)
-* Micha Mazaheri (@mittsh)
+* Quentin Rousseau ([@kwent](https://github.com/kwent))
