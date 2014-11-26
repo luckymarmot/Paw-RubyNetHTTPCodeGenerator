@@ -86,8 +86,8 @@ RubyNetHTTPCodeGenerator = ->
         else if typeof(object) == 'boolean'
             s = "#{if object then "True" else "False"}"
         else if typeof(object) == 'object'
-            indent_str = Array(indent + 2).join('    ')
-            indent_str_children = Array(indent + 3).join('    ')
+            indent_str = Array(indent + 1).join('    ')
+            indent_str_children = Array(indent + 2).join('    ')
             if object.length?
                 s = "[\n" +
                     ("#{indent_str_children}#{@json_body_object(value, indent+1)}" for value in object).join(',\n') +
