@@ -33,7 +33,7 @@ def send_request
         {{/body.has_raw_body}}
         {{#body.has_long_body}}
         data = "" # set your body string
-        req.body = "{{{data}}}"
+        req.body = data
         
         {{/body.has_long_body}}
         {{#body.has_url_encoded_body}}
@@ -42,7 +42,7 @@ def send_request
             "{{{name}}}" => "{{{value}}}",
         {{/body.url_encoded_body}}
         }
-        req.body = "{{{data}}}"
+        req.body = data
         
         {{/body.has_url_encoded_body}}
         {{#body.has_multipart_body}}
@@ -56,7 +56,7 @@ def send_request
         {{/body.has_multipart_body}}
         {{#body.has_json_body}}
         data = JSON.dump({{{body.json_body_object}}})
-        req.body = "{{{data}}}"
+        req.body = data
         
         {{/body.has_json_body}}
         res = http.request(req)
