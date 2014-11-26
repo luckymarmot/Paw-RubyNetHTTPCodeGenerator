@@ -133,8 +133,8 @@
       } else if (typeof object === 'boolean') {
         s = "" + (object ? "True" : "False");
       } else if (typeof object === 'object') {
-        indent_str = Array(indent + 2).join('    ');
-        indent_str_children = Array(indent + 3).join('    ');
+        indent_str = Array(indent + 1).join('    ');
+        indent_str_children = Array(indent + 2).join('    ');
         if (object.length != null) {
           s = "[\n" + ((function() {
             var _i, _len, _results;
