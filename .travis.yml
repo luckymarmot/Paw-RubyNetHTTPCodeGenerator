@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+- '0.10'
+before_install:
+- npm install coffee-script
+before_script:
+- ./node_modules/.bin/cake archive
+script:
+- ./node_modules/.bin/cake test
+deploy:
+  provider: releases
+  api_key:
+    secure: ScXedhNCI0nnmRnxm+ef6xq+E5/Wo3ipmw8d3EE2Z5Z4nFMPHT9GhgQLKOYaorWtflIxcrZ6z/DADU3vXfUSgv4OQtJLIA7USyHnxr3PURFYZGc958WI13tOyYur47RzV+X39X+H3z1sHGOCJiuHqD+RG2rhCGHpqIW6XnejdcE=
+  file: build/RubyNetHTTPCodeGenerator.zip
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
+    repo: LuckyMarmot/Paw-RubyNetHTTPCodeGenerator
