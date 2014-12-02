@@ -19,23 +19,23 @@ def send_request
         {{/url.params}}
         }
         req.form_data = data
-        
         {{/url.has_params}}
+        {{! ----- }}
         {{#headers.has_headers}}
         {{#headers.header_list}}
-        req.add_field "{{{header_name}}}, {{{header_value}}}"
+        req.add_field "{{{header_name}}}", "{{{header_value}}}"
         {{/headers.header_list}}
-        
         {{/headers.has_headers}}
+        {{! ----- }}
         {{#body.has_raw_body}}
         req.body = "{{{body.raw_body}}}"
-        
         {{/body.has_raw_body}}
+        {{! ----- }}
         {{#body.has_long_body}}
         data = "" # set your body string
         req.body = data
-        
         {{/body.has_long_body}}
+        {{! ----- }}
         {{#body.has_url_encoded_body}}
         data = {
         {{#body.url_encoded_body}}
@@ -43,8 +43,8 @@ def send_request
         {{/body.url_encoded_body}}
         }
         req.body = data
-        
         {{/body.has_url_encoded_body}}
+        {{! ----- }}
         {{#body.has_multipart_body}}
         files = {
         {{#body.multipart_body}}
@@ -52,13 +52,18 @@ def send_request
         {{/body.multipart_body}}
         }
         req.form_data = files
-        
         {{/body.has_multipart_body}}
+        {{! ----- }}
         {{#body.has_json_body}}
-        data = JSON.dump({{{body.json_body_object}}})
-        req.body = data
+        req.add_field "Content-Type", "application/json"
         
+        dict = {{{body.json_body_object}}}
+        
+        data = JSON.dump(dict)
+        req.body = data
         {{/body.has_json_body}}
+        
+        {{! ----- }}
         res = http.request(req)
         puts "Response HTTP #{res.code}"
     rescue Exception => e
