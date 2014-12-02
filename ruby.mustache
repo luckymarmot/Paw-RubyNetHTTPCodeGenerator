@@ -2,38 +2,27 @@ require 'net/http'
 {{#body.has_json_body}}
 require 'json'
 {{/body.has_json_body}}
+{{#body.has_multipart_body}}
+# gem install multipart-post
+# Adds multipart POST capability to net/http
+require 'net/http/post/multipart'
+{{/body.has_multipart_body}}
 
 def send_request
     # {{{request.name}}} ({{{request.method}}} {{{url.base}}})
     
     begin
-        uri = URI('{{{url.base}}}')
-            
-        http = Net::HTTP.new(uri.host, uri.port)
-        req =  Net::HTTP::{{{method}}}.new(uri)
+        uri = URI('{{{url.fullpath}}}')
         
-        {{#url.has_params}}
-        data = {
-        {{#url.params}}
-            "{{{name}}}" => "{{{value}}}",
-        {{/url.params}}
-        }
-        req.form_data = data
-        {{/url.has_params}}
-        {{! ----- }}
-        {{#headers.has_headers}}
-        {{#headers.header_list}}
-        req.add_field "{{{header_name}}}", "{{{header_value}}}"
-        {{/headers.header_list}}
-        {{/headers.has_headers}}
-        {{! ----- }}
+        # Create client          
+        http = Net::HTTP.new(uri.host, uri.port)
+
         {{#body.has_raw_body}}
-        req.body = "{{{body.raw_body}}}"
+        body = "{{{body.raw_body}}}"
         {{/body.has_raw_body}}
         {{! ----- }}
         {{#body.has_long_body}}
-        data = "" # set your body string
-        req.body = data
+        body = "" # set your body string
         {{/body.has_long_body}}
         {{! ----- }}
         {{#body.has_url_encoded_body}}
@@ -42,30 +31,53 @@ def send_request
             "{{{name}}}" => "{{{value}}}",
         {{/body.url_encoded_body}}
         }
-        req.body = data
+        body = URI.encode_www_form(data)
         {{/body.has_url_encoded_body}}
         {{! ----- }}
         {{#body.has_multipart_body}}
-        files = {
+        body = {
         {{#body.multipart_body}}
             "{{{name}}}" => "{{{value}}}",
         {{/body.multipart_body}}
         }
-        req.form_data = files
         {{/body.has_multipart_body}}
         {{! ----- }}
         {{#body.has_json_body}}
-        req.add_field "Content-Type", "application/json"
-        
         dict = {{{body.json_body_object}}}
-        
-        data = JSON.dump(dict)
-        req.body = data
+        body = JSON.dump(dict)
         {{/body.has_json_body}}
         
         {{! ----- }}
+        # Create Request
+        req =  Net::HTTP::{{{method}}}{{#body.has_multipart_body}}::Multipart{{/body.has_multipart_body}}.new(uri{{#body.has_multipart_body}}, body{{/body.has_multipart_body}})
+        {{! ----- }}
+        {{#headers.has_headers}}
+        {{#headers.header_list}}
+        # Add headers
+        req.add_field "{{{header_name}}}", "{{{header_value}}}"
+        {{/headers.header_list}}
+        {{/headers.has_headers}}
+        {{! ----- }}
+        {{#body.has_json_body}}
+        # Set header and body
+        req.add_field "Content-Type", "application/json"
+        req.body = body
+        {{/body.has_json_body}}
+        {{#body.has_raw_body}}
+        # Set header and body
+        req.add_field "Content-Type", "plain/text"
+        req.body = body
+        {{/body.has_raw_body}}
+        {{! ----- }}
+        {{#body.has_url_encoded_body}}
+        # Set header and body
+        req.body = body
+        {{/body.has_url_encoded_body}}
+        
+        # Fetch Request
         res = http.request(req)
-        puts "Response HTTP #{res.code}"
+        puts "Response HTTP Status Code : #{res.code}"
+        puts "\nResponse HTTP Response Body : #{res.body}"
     rescue Exception => e
         puts "HTTP Request failed (#{e.message})"
     end

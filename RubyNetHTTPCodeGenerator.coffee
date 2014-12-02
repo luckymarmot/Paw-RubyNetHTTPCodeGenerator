@@ -1,5 +1,4 @@
 require "mustache.js"
-require "URI.js"
 
 addslashes = (str) ->
     ("#{str}").replace(/[\\"]/g, '\\$&')
@@ -7,23 +6,8 @@ addslashes = (str) ->
 RubyNetHTTPCodeGenerator = ->
 
     @url = (request) ->
-        url_params_object = (() ->
-            _uri = URI request.url
-            _uri.search true
-        )()
-        url_params = ({
-            "name": addslashes name
-            "value": addslashes value
-        } for name, value of url_params_object)
-
         return {
-            "base": addslashes (() ->
-                _uri = URI request.url
-                _uri.search("")
-                _uri
-            )()
-            "params": url_params
-            "has_params": url_params.length > 0
+            "fullpath" : request.url
         }
 
     @headers = (request) ->
