@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/LuckyMarmot/Paw-RubyNetHTTPCodeGenerator.svg?branch=master)](https://travis-ci.org/LuckyMarmot/Paw-RubyNetHTTPCodeGenerator)
+[![Build Status](https://travis-ci.org/luckymarmot/Paw-RubyNetHTTPCodeGenerator.svg?branch=master)](https://travis-ci.org/luckymarmot/Paw-RubyNetHTTPCodeGenerator)
 
 # Ruby + Net::HTTP Code Generator (Paw Extension)
 
@@ -18,7 +18,7 @@ Copyright © 2014 Paw Inc.
 
 ## Contributors
 
-Created by Quentin Rousseau ([@kwent](https://github.com/kwent)). See [Contributors](https://github.com/LuckyMarmot/Paw-RubyNetHTTPCodeGenerator/graphs/contributors).
+Created by Quentin Rousseau ([@kwent](https://github.com/kwent)). See [Contributors](https://github.com/luckymarmot/Paw-RubyNetHTTPCodeGenerator/graphs/contributors).
 
 ## Credits
 
