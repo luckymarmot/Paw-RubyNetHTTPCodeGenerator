@@ -104,5 +104,6 @@ RubyNetHTTPCodeGenerator.identifier =
 RubyNetHTTPCodeGenerator.title =
     "Ruby (Net::HTTP)"
 RubyNetHTTPCodeGenerator.fileExtension = "rb"
+RubyNetHTTPCodeGenerator.languageHighlighter = "ruby"
 
 registerCodeGenerator RubyNetHTTPCodeGenerator
