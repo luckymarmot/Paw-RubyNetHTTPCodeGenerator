@@ -39,7 +39,7 @@ RubyNetHTTPCodeGenerator = ->
             }
 
         multipart_body = request.multipartBody
-        if multipart_body 
+        if multipart_body
             return {
                 "has_multipart_body":true
                 "multipart_body": ({
@@ -100,8 +100,9 @@ RubyNetHTTPCodeGenerator = ->
 
 
 RubyNetHTTPCodeGenerator.identifier =
-    "com.luckymarmot.PawExtensions.RubyNetHTTPCodeGenerator";
+    "com.luckymarmot.PawExtensions.RubyNetHTTPCodeGenerator"
 RubyNetHTTPCodeGenerator.title =
-    "Ruby (Net::HTTP)";
+    "Ruby (Net::HTTP)"
+RubyNetHTTPCodeGenerator.fileExtension = "rb"
 
 registerCodeGenerator RubyNetHTTPCodeGenerator
