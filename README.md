@@ -2,13 +2,23 @@
 
 # Ruby + Net::HTTP Code Generator (Paw Extension)
 
-This a Paw Extension that generates code for Ruby using the [Net::HTTP](http://ruby-doc.org/stdlib-2.1.5/libdoc/net/http/rdoc/Net/HTTP.html) library.
+A [Paw Extension](http://luckymarmot.com/paw/extensions/) that generates Ruby code for the [Net::HTTP](http://ruby-doc.org/stdlib-2.1.5/libdoc/net/http/rdoc/Net/HTTP.html) library.
 
 ## Installation
 
-* `npm install`
-* `cake build`
-* `cake install`
+```shell
+npm install
+cake build
+cake install
+```
+
+## Development
+
+During development, watch for changes:
+
+```shell
+cake watch
+```
 
 ## License
 
