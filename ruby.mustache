@@ -78,7 +78,7 @@ def send_request
     res = http.request(req)
     puts "Response HTTP Status Code: #{res.code}"
     puts "Response HTTP Response Body: #{res.body}"
-  rescue Exception => e
+  rescue StandardError => e
     puts "HTTP Request failed (#{e.message})"
   end
 end
