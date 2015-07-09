@@ -1,4 +1,7 @@
 require 'net/http'
+{{#url.has_https_scheme}}
+require 'net/https'
+{{/url.has_https_scheme}}
 {{#body.has_json_body}}
 require 'json'
 {{/body.has_json_body}}
@@ -16,6 +19,10 @@ def send_request
 
     # Create client
     http = Net::HTTP.new(uri.host, uri.port)
+    {{#url.has_https_scheme}}
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+    {{/url.has_https_scheme}}
 
     {{#body.has_raw_body}}
     body = "{{{body.raw_body}}}"
