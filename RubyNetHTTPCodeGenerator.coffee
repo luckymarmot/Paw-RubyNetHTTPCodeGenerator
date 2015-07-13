@@ -8,6 +8,7 @@ RubyNetHTTPCodeGenerator = ->
     @url = (request) ->
         return {
             "fullpath" : request.url
+            "has_https_scheme" : request.url.indexOf("https://") == 0
         }
 
     @headers = (request) ->
