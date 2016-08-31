@@ -67,16 +67,10 @@ def send_request
     {{! ----- }}
     {{#body.has_json_body}}
     # Set header and body
-    {{#body.use_content_type}}
-    req.add_field "Content-Type", "application/json"
-    {{/body.use_content_type}}
     req.body = body
     {{/body.has_json_body}}
     {{#body.has_raw_body}}
     # Set header and body
-    {{#body.use_content_type}}
-    req.add_field "Content-Type", "plain/text"
-    {{/body.use_content_type}}
     req.body = body
     {{/body.has_raw_body}}
     {{! ----- }}
