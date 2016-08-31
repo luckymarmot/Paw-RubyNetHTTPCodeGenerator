@@ -90,6 +90,21 @@ RubyNetHTTPCodeGenerator = ->
 
         return s
 
+    @filterHeaders = (view) ->
+        if view.headers.has_headers
+            contentTypeHeaderIndexes = view.headers.header_list.reduce((indexes, header, index) ->
+                if header.header_name == "Content-Type"
+                    indexes.push(index)
+                return indexes
+            , [])
+            hasContentType = contentTypeHeaderIndexes.length > 0
+            if hasContentType
+                view.body.use_content_type = false
+            else
+                view.body.use_content_type = true
+        return view
+
+
     @generate = (context) ->
         request = context.getCurrentRequest()
 
@@ -99,6 +114,8 @@ RubyNetHTTPCodeGenerator = ->
             "url": @url request
             "headers": @headers request
             "body": @body request
+
+        view = @filterHeaders view
 
         template = readFile "ruby.mustache"
         Mustache.render template, view
