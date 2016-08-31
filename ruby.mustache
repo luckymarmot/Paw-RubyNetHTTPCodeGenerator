@@ -66,16 +66,16 @@ def send_request
     {{/headers.has_headers}}
     {{! ----- }}
     {{#body.has_json_body}}
-    # Set header and body
+    # Set body
     req.body = body
     {{/body.has_json_body}}
     {{#body.has_raw_body}}
-    # Set header and body
+    # Set body
     req.body = body
     {{/body.has_raw_body}}
     {{! ----- }}
     {{#body.has_url_encoded_body}}
-    # Set header and body
+    # Set body
     req.body = body
     {{/body.has_url_encoded_body}}
 
