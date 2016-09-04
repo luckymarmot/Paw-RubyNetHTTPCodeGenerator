@@ -11,79 +11,76 @@ require 'json'
 require 'net/http/post/multipart'
 {{/body.has_multipart_body}}
 
+# {{{request.name}}} ({{{request.method}}} {{{url.base}}})
 def send_request
-  # {{{request.name}}} ({{{request.method}}} {{{url.base}}})
+  uri = URI('{{{url.fullpath}}}')
 
-  begin
-    uri = URI('{{{url.fullpath}}}')
+  # Create client
+  http = Net::HTTP.new(uri.host, uri.port)
+  {{#url.has_https_scheme}}
+  http.use_ssl = true
+  http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+  {{/url.has_https_scheme}}
+  {{! ----- }}
+  {{#body.has_raw_body}}
+  body = "{{{body.raw_body}}}"
+  {{/body.has_raw_body}}
+  {{! ----- }}
+  {{#body.has_long_body}}
+  body = "" # set your body string
+  {{/body.has_long_body}}
+  {{! ----- }}
+  {{#body.has_url_encoded_body}}
+  data = {
+  {{#body.url_encoded_body}}
+    "{{{name}}}" => "{{{value}}}",
+  {{/body.url_encoded_body}}
+  }
+  body = URI.encode_www_form(data)
+  {{/body.has_url_encoded_body}}
+  {{! ----- }}
+  {{#body.has_multipart_body}}
+  body = {
+  {{#body.multipart_body}}
+    "{{{name}}}" => "{{{value}}}",
+  {{/body.multipart_body}}
+  }
+  {{/body.has_multipart_body}}
+  {{! ----- }}
+  {{#body.has_json_body}}
+  dict = {{{body.json_body_object}}}
+  body = JSON.dump(dict)
+  {{/body.has_json_body}}
 
-    # Create client
-    http = Net::HTTP.new(uri.host, uri.port)
-    {{#url.has_https_scheme}}
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-    {{/url.has_https_scheme}}
+  {{! ----- }}
+  # Create Request
+  req =  Net::HTTP::{{{method}}}{{#body.has_multipart_body}}::Multipart{{/body.has_multipart_body}}.new(uri{{#body.has_multipart_body}}, body{{/body.has_multipart_body}})
+  {{! ----- }}
+  {{#headers.has_headers}}
+  {{#headers.header_list}}
+  # Add headers
+  req.add_field "{{{header_name}}}", "{{{header_value}}}"
+  {{/headers.header_list}}
+  {{/headers.has_headers}}
+  {{! ----- }}
+  {{#body.has_json_body}}
+  # Set body
+  req.body = body
+  {{/body.has_json_body}}
+  {{#body.has_raw_body}}
+  # Set body
+  req.body = body
+  {{/body.has_raw_body}}
+  {{! ----- }}
+  {{#body.has_url_encoded_body}}
+  # Set body
+  req.body = body
+  {{/body.has_url_encoded_body}}
 
-    {{#body.has_raw_body}}
-    body = "{{{body.raw_body}}}"
-    {{/body.has_raw_body}}
-    {{! ----- }}
-    {{#body.has_long_body}}
-    body = "" # set your body string
-    {{/body.has_long_body}}
-    {{! ----- }}
-    {{#body.has_url_encoded_body}}
-    data = {
-    {{#body.url_encoded_body}}
-      "{{{name}}}" => "{{{value}}}",
-    {{/body.url_encoded_body}}
-    }
-    body = URI.encode_www_form(data)
-    {{/body.has_url_encoded_body}}
-    {{! ----- }}
-    {{#body.has_multipart_body}}
-    body = {
-    {{#body.multipart_body}}
-      "{{{name}}}" => "{{{value}}}",
-    {{/body.multipart_body}}
-    }
-    {{/body.has_multipart_body}}
-    {{! ----- }}
-    {{#body.has_json_body}}
-    dict = {{{body.json_body_object}}}
-    body = JSON.dump(dict)
-    {{/body.has_json_body}}
-
-    {{! ----- }}
-    # Create Request
-    req =  Net::HTTP::{{{method}}}{{#body.has_multipart_body}}::Multipart{{/body.has_multipart_body}}.new(uri{{#body.has_multipart_body}}, body{{/body.has_multipart_body}})
-    {{! ----- }}
-    {{#headers.has_headers}}
-    {{#headers.header_list}}
-    # Add headers
-    req.add_field "{{{header_name}}}", "{{{header_value}}}"
-    {{/headers.header_list}}
-    {{/headers.has_headers}}
-    {{! ----- }}
-    {{#body.has_json_body}}
-    # Set body
-    req.body = body
-    {{/body.has_json_body}}
-    {{#body.has_raw_body}}
-    # Set body
-    req.body = body
-    {{/body.has_raw_body}}
-    {{! ----- }}
-    {{#body.has_url_encoded_body}}
-    # Set body
-    req.body = body
-    {{/body.has_url_encoded_body}}
-
-    # Fetch Request
-    res = http.request(req)
-    puts "Response HTTP Status Code: #{res.code}"
-    puts "Response HTTP Response Body: #{res.body}"
-  rescue StandardError => e
-    puts "HTTP Request failed (#{e.message})"
-  end
+  # Fetch Request
+  res = http.request(req)
+  puts "Response HTTP Status Code: #{res.code}"
+  puts "Response HTTP Response Body: #{res.body}"
+rescue StandardError => e
+  puts "HTTP Request failed (#{e.message})"
 end
