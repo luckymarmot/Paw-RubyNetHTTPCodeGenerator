@@ -57,9 +57,9 @@ def send_request
   req =  Net::HTTP::{{{method}}}{{#body.has_multipart_body}}::Multipart{{/body.has_multipart_body}}.new(uri{{#body.has_multipart_body}}, body{{/body.has_multipart_body}})
   {{! ----- }}
   {{#headers.has_headers}}
-  {{#headers.header_list}}
   # Add headers
-  req.add_field "{{{header_name}}}", "{{{header_value}}}"
+  {{#headers.header_list}}
+  req["{{{header_name}}}"] = "{{{header_value}}}"
   {{/headers.header_list}}
   {{/headers.has_headers}}
   {{! ----- }}
